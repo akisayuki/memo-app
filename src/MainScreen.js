@@ -1,5 +1,6 @@
 //メモ一覧（ホーム）画面
 
+import { FAB } from "@rneui/themed";
 import React from "react";
 import { Text, View, StyleSheet, FlatList } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -24,7 +25,7 @@ const data = [
     }
 ];
 
-//配列の各要素を描画
+//データの各要素を描画
 const Item = ({item}) => {
     return (
         <View style={styles.itemContainer}>
@@ -43,11 +44,19 @@ const MainScreen = () => {
                     data={data}
                     renderItem={({item}) => {
                         return (
-                            //Itemコンポーネントの引数を設定
+                            //Itemコンポーネントの引数itemを設定
                             <Item item={item}/>
                         );
                     }}
                     keyExtractor={item => item.id}
+                />
+                {/* 新規作成ボタンを表示 */}
+                <FAB
+                    size="large"
+                    icon={{name: 'add', color: 'white'}}
+                    color="lightblue"
+                    placement="right"
+                    style={styles.fab}
                 />
             </SafeAreaView>
         </SafeAreaProvider>
@@ -56,6 +65,7 @@ const MainScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         margin: '5%',
         justifyContent: 'center'
     },
@@ -71,6 +81,11 @@ const styles = StyleSheet.create({
     itemText: {
         fontSize: 16,
         marginTop: 12
+    },
+    fab: {
+        margin: 10,
+        right: 10,
+        bottom: 10
     }
 });
 
