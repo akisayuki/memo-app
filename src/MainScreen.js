@@ -1,5 +1,6 @@
 //メモ一覧（ホーム）画面
 
+import { useNavigation } from "@react-navigation/native";
 import { FAB } from "@rneui/themed";
 import React from "react";
 import { Text, View, StyleSheet, FlatList } from "react-native";
@@ -37,6 +38,8 @@ const Item = ({item}) => {
 
 //メイン画面
 const MainScreen = () => {
+    const navigation = useNavigation();
+    
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
@@ -57,6 +60,7 @@ const MainScreen = () => {
                     color="lightblue"
                     placement="right"
                     style={styles.fab}
+                    onPress={() => navigation.navigate('NewEntry')}
                 />
             </SafeAreaView>
         </SafeAreaProvider>
