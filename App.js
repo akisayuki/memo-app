@@ -4,9 +4,10 @@ import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainScreen from './src/MainScreen';
 import NewEntryScreen from './src/NewEntryScreen';
+import { Button } from '@rneui/themed';
 
 //Navigationの設定
-const RootStack = createNativeStackNavigator({
+const MyStack = createNativeStackNavigator({
   initialRouteName: 'Home',
   screens: {
     Home: {
@@ -24,7 +25,7 @@ const RootStack = createNativeStackNavigator({
   }
 });
 
-const Navigation = createStaticNavigation(RootStack);
+const Navigation = createStaticNavigation(MyStack);
 
 export default function App() {
   return (

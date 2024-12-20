@@ -47,7 +47,7 @@ const MainScreen = () => {
                     data={data}
                     renderItem={({item}) => {
                         return (
-                            //Itemコンポーネントの引数itemを設定
+                            //Itemコンポーネントのpropsであるitemを設定
                             <Item item={item}/>
                         );
                     }}
@@ -76,10 +76,11 @@ const styles = StyleSheet.create({
     itemContainer: {
         marginTop: 16,
         paddingBottom: 12,
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        borderBottomColor: 'silver'
     },
     itemTitle: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold'
     },
     itemText: {
