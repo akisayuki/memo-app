@@ -5,6 +5,16 @@ import { useState } from "react";
 import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
+function InputField({ placeholder, style }) {
+    return(
+        <TextInput
+            multiline
+            placeholder={placeholder}
+            style={style}
+        />
+    )
+}
+
 const NewEntryScreen = () => {
     return(
         <SafeAreaProvider>
@@ -23,19 +33,16 @@ const NewEntryScreen = () => {
                             behavior={"position"}
                             keyboardVerticalOffset={100}
                         >
-                            <TextInput
-                                multiline
-                                placeholder="タイトル"
+                            <InputField
+                                placeholder={"タイトル"}
                                 style={styles.textLine}
                             />
-                            <TextInput
-                                multiline
-                                placeholder="本文"
+                            <InputField
+                                placeholder={"本文"}
                                 style={styles.textBox}
                             />
-                            <TextInput
-                                multiline
-                                placeholder="URL"
+                            <InputField
+                                placeholder={"URL、書籍名など"}
                                 style={styles.textLine}
                             />
                         </KeyboardAvoidingView>
