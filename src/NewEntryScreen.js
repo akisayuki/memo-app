@@ -1,21 +1,58 @@
 //新規作成画面
 
-import { Input, ListItem } from "@rneui/themed";
-import { useState } from "react";
-import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native"
+import { Input, ListItem, Button } from "@rneui/themed";
+import React, { useState } from "react";
+import { FlatList, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-function InputField({ placeholder, style }) {
-    return(
+//入力フィールドを追加する
+const InputField = ({ data }) => {
+    return (
         <TextInput
             multiline
-            placeholder={placeholder}
-            style={style}
+            placeholder={data.placeholder}
+            style={data.style}
         />
-    )
+    );
 }
 
 const NewEntryScreen = () => {
+    //InputFieldの設定データ
+    const settingItems = [
+        {
+            id: 0,
+            placeholder: "タイトル",
+            style: styles.textLine
+        },
+        {
+            id: 1,
+            placeholder: "本文",
+            style: styles.textBox
+        },
+        {
+            id: 2,
+            placeholder: "URL、書籍名など",
+            style: styles.textLine
+        },
+        {
+            id: 3,
+            placeholder: "URL、書籍名など",
+            style: styles.textLine
+        },
+        {
+            id: 4,
+            placeholder: "URL、書籍名など",
+            style: styles.textLine
+        }
+    ];
+
+    //InputFiledの設定を配列settingItemsから取得
+    const settings = settingItems.map((data) => {
+        return (
+            <InputField data={data} />
+        );
+    });
+
     return(
         <SafeAreaProvider>
             <SafeAreaView>
@@ -32,19 +69,9 @@ const NewEntryScreen = () => {
                             style={styles.container}
                             behavior={"position"}
                             keyboardVerticalOffset={100}
+                            key={settingItems.id}
                         >
-                            <InputField
-                                placeholder={"タイトル"}
-                                style={styles.textLine}
-                            />
-                            <InputField
-                                placeholder={"本文"}
-                                style={styles.textBox}
-                            />
-                            <InputField
-                                placeholder={"URL、書籍名など"}
-                                style={styles.textLine}
-                            />
+                            {settings}
                         </KeyboardAvoidingView>
                     </ScrollView>
                 </TouchableWithoutFeedback>

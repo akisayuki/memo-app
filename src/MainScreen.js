@@ -47,7 +47,6 @@ const MainScreen = () => {
                     data={data}
                     renderItem={({item}) => {
                         return (
-                            //Itemコンポーネントのpropsであるitemを設定
                             <Item item={item}/>
                         );
                     }}
