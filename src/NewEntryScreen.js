@@ -2,7 +2,17 @@
 
 import { Input, ListItem, Button } from "@rneui/themed";
 import React, { useState } from "react";
-import { FlatList, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native"
+import { 
+    FlatList, 
+    Keyboard, 
+    KeyboardAvoidingView, 
+    Platform, 
+    ScrollView, 
+    StyleSheet, 
+    Text, 
+    TextInput, 
+    TouchableWithoutFeedback, 
+    View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 //入力フィールドを追加する
@@ -14,6 +24,11 @@ const InputField = ({ data }) => {
             style={data.style}
         />
     );
+}
+
+//TODO ボタンを押すとデータを保存する
+const onSave = () => {
+
 }
 
 const NewEntryScreen = () => {
@@ -69,9 +84,17 @@ const NewEntryScreen = () => {
                             style={styles.container}
                             behavior={"position"}
                             keyboardVerticalOffset={100}
-                            key={settingItems.id}
+                            key={settings.id}
                         >
                             {settings}
+                            <Button
+                                title="保存する"
+                                icon={styles.icon}
+                                iconContainerStyle={styles.iconContainer}
+                                containerStyle={styles.saveButtonContainer}
+                                buttonStyle={styles.saveButtonStyle}
+                                onPress={onSave}
+                            />
                         </KeyboardAvoidingView>
                     </ScrollView>
                 </TouchableWithoutFeedback>
@@ -97,6 +120,20 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontSize: 16,
         maxHeight: 300
+    },
+    saveButtonContainer: {
+        margin: 10,
+        borderRadius: 10
+    },
+    saveButtonStyle: {
+        backgroundColor: 'lightblue'
+    },
+    icon: {
+        name: 'add',
+        color: 'white'
+    },
+    iconContainer: {
+        marginRight: 10
     }
 });
 
