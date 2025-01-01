@@ -4,7 +4,6 @@ import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainScreen from './src/MainScreen';
 import NewEntryScreen from './src/NewEntryScreen';
-import { Button } from '@rneui/themed';
 
 //Navigationの設定
 const MyStack = createNativeStackNavigator({

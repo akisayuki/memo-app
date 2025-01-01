@@ -56,7 +56,7 @@ const MainScreen = () => {
                 <FAB
                     size="large"
                     icon={{name: 'add', color: 'white'}}
-                    color="lightblue"
+                    color="#66ccff"
                     placement="right"
                     style={styles.fab}
                     onPress={() => navigation.navigate('NewEntry')}

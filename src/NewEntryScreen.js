@@ -1,30 +1,15 @@
 //新規作成画面
 
-import { Input, ListItem, Button } from "@rneui/themed";
-import React, { useState } from "react";
-import { 
-    FlatList, 
+import { Button } from "@rneui/themed";
+import React from "react";
+import {
     Keyboard, 
     KeyboardAvoidingView, 
-    Platform, 
-    ScrollView, 
-    StyleSheet, 
-    Text, 
-    TextInput, 
-    TouchableWithoutFeedback, 
-    View } from "react-native"
+    ScrollView,
+    StyleSheet,
+    TouchableWithoutFeedback } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-
-//入力フィールドを追加する
-const InputField = ({ data }) => {
-    return (
-        <TextInput
-            multiline
-            placeholder={data.placeholder}
-            style={data.style}
-        />
-    );
-}
+import { FieldList, ReferenceFieldList } from "./components/AddInputField";
 
 //TODO ボタンを押すとデータを保存する
 const onSave = () => {
@@ -32,42 +17,6 @@ const onSave = () => {
 }
 
 const NewEntryScreen = () => {
-    //InputFieldの設定データ
-    const settingItems = [
-        {
-            id: 0,
-            placeholder: "タイトル",
-            style: styles.textLine
-        },
-        {
-            id: 1,
-            placeholder: "本文",
-            style: styles.textBox
-        },
-        {
-            id: 2,
-            placeholder: "URL、書籍名など",
-            style: styles.textLine
-        },
-        {
-            id: 3,
-            placeholder: "URL、書籍名など",
-            style: styles.textLine
-        },
-        {
-            id: 4,
-            placeholder: "URL、書籍名など",
-            style: styles.textLine
-        }
-    ];
-
-    //InputFiledの設定を配列settingItemsから取得
-    const settings = settingItems.map((data) => {
-        return (
-            <InputField data={data} />
-        );
-    });
-
     return(
         <SafeAreaProvider>
             <SafeAreaView>
@@ -84,9 +33,9 @@ const NewEntryScreen = () => {
                             style={styles.container}
                             behavior={"position"}
                             keyboardVerticalOffset={100}
-                            key={settings.id}
                         >
-                            {settings}
+                            <FieldList />
+                            <ReferenceFieldList />
                             <Button
                                 title="保存する"
                                 icon={styles.icon}
@@ -107,26 +56,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    textLine: {
-        margin: 10,
-        borderBottomColor: 'silver',
-        borderBottomWidth: 1,
-        fontSize: 16,
-        maxHeight: 80
-    },
-    textBox: {
-        margin: 10,
-        borderColor: 'silver',
-        borderWidth: 1,
-        fontSize: 16,
-        maxHeight: 300
-    },
     saveButtonContainer: {
         margin: 10,
         borderRadius: 10
     },
     saveButtonStyle: {
-        backgroundColor: 'lightblue'
+        backgroundColor: '#66ccff'
     },
     icon: {
         name: 'add',
