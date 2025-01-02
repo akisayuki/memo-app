@@ -1,5 +1,6 @@
 //メモ一覧（ホーム）画面
 
+import { useNavigation } from "@react-navigation/native";
 import { FAB } from "@rneui/themed";
 import React from "react";
 import { Text, View, StyleSheet, FlatList } from "react-native";
@@ -37,6 +38,8 @@ const Item = ({item}) => {
 
 //メイン画面
 const MainScreen = () => {
+    const navigation = useNavigation();
+    
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
@@ -44,7 +47,6 @@ const MainScreen = () => {
                     data={data}
                     renderItem={({item}) => {
                         return (
-                            //Itemコンポーネントの引数itemを設定
                             <Item item={item}/>
                         );
                     }}
@@ -54,9 +56,10 @@ const MainScreen = () => {
                 <FAB
                     size="large"
                     icon={{name: 'add', color: 'white'}}
-                    color="lightblue"
+                    color="#66ccff"
                     placement="right"
                     style={styles.fab}
+                    onPress={() => navigation.navigate('NewEntry')}
                 />
             </SafeAreaView>
         </SafeAreaProvider>
@@ -72,10 +75,11 @@ const styles = StyleSheet.create({
     itemContainer: {
         marginTop: 16,
         paddingBottom: 12,
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        borderBottomColor: 'silver'
     },
     itemTitle: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold'
     },
     itemText: {
