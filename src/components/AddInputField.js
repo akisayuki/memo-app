@@ -43,7 +43,7 @@ export const FieldList = () => {
 //参考文献リストを表示
 export const ReferenceFieldList = () => {
     const referencePlaceholder = "URL、書籍名など";
-
+    //参考文献リストの入力フォームをstateで管理
     const [reference, setReference] = useState([
         {
             id: Date.now(),
@@ -74,6 +74,8 @@ export const ReferenceFieldList = () => {
         );
     });
 
+    //TODO 参考文献フィールドの上限を設定する。
+
     return (
         <View>
             <View style={styles.referenceHeader}>
@@ -101,10 +103,10 @@ export const ReferenceFieldList = () => {
 
 const styles = StyleSheet.create({
     referenceHeader: {
-        flexDirection: 'row',
+        flexDirection: 'row',   //テキストとボタンを横並びに
     },
     inputContainer: {
-        flexDirection: 'row',
+        flexDirection: 'row',   //入力欄と削除ボタンを横並びに
         alignItems: 'center'
     },
     inputLine: {
