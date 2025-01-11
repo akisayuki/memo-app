@@ -54,3 +54,5 @@ const styles = StyleSheet.create({
         maxHeight: 300
     }
 })
+
+export default FieldList;
