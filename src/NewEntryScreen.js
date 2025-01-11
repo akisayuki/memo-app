@@ -7,9 +7,9 @@ import {
     KeyboardAvoidingView, 
     ScrollView,
     StyleSheet,
-    TouchableWithoutFeedback } from "react-native"
+    TouchableWithoutFeedback } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { FieldList, ReferenceFieldList } from "./components/AddInputField";
+import AddInputField from "./components/AddInputField";
 
 //TODO ボタンを押すとデータを保存する
 const onSave = () => {
@@ -34,8 +34,7 @@ const NewEntryScreen = () => {
                             behavior={"position"}
                             keyboardVerticalOffset={100}
                         >
-                            <FieldList />
-                            <ReferenceFieldList />
+                            <AddInputField />
                             <Button
                                 title="保存する"
                                 icon={styles.icon}
@@ -72,4 +71,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default NewEntryScreen
+export default NewEntryScreen;

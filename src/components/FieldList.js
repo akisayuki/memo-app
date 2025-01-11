@@ -1,6 +1,6 @@
 //入力フィールドのタイトルと本文のUIを表示するコンポーネント
 
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import InputField from "./InputField";
 
 const FieldList = ({ title, setTitle, body, setBody}) => {
@@ -26,7 +26,7 @@ const FieldList = ({ title, setTitle, body, setBody}) => {
     return settingItems.map((data) => {
         return(
             <View key={data.id}>
-                <Text>{data.placeholder}</Text>
+                <Text style={styles.text}>{data.placeholder}</Text>
                 <InputField {...data} />
             </View>
         );

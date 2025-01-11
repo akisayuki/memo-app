@@ -1,6 +1,6 @@
 //参考文献リストを表示
 
-import { Alert, Text, StyleSheet, View } from "react-native";
+import { Alert, Text, StyleSheet, View, Button } from "react-native";
 import InputField from "./InputField";
 
 const ReferenceFieldList = ({ reference, setReference }) => {
