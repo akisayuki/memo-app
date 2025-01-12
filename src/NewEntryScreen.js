@@ -1,6 +1,5 @@
 //新規作成画面
 
-import { Button } from "@rneui/themed";
 import React from "react";
 import {
     Keyboard, 
@@ -8,13 +7,10 @@ import {
     ScrollView,
     StyleSheet,
     TouchableWithoutFeedback } from "react-native";
+import { Button } from "@rneui/themed";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import AddInputField from "./components/AddInputField";
-
-//TODO ボタンを押すとデータを保存する
-const onSave = () => {
-
-}
+import { onSaveData } from "./components/CRUDoperations";
 
 const NewEntryScreen = () => {
     return(
@@ -41,7 +37,7 @@ const NewEntryScreen = () => {
                                 iconContainerStyle={styles.iconContainer}
                                 containerStyle={styles.saveButtonContainer}
                                 buttonStyle={styles.saveButtonStyle}
-                                onPress={onSave}
+                                onPress={onSaveData}
                             />
                         </KeyboardAvoidingView>
                     </ScrollView>

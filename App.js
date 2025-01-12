@@ -4,6 +4,8 @@ import { createStaticNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainScreen from './src/MainScreen';
 import NewEntryScreen from './src/NewEntryScreen';
+import { useEffect } from 'react';
+import { initDatabase } from './src/components/CRUDoperations';
 
 //Navigationの設定
 const MyStack = createNativeStackNavigator({
@@ -27,6 +29,11 @@ const MyStack = createNativeStackNavigator({
 const Navigation = createStaticNavigation(MyStack);
 
 export default function App() {
+  //データベースの初期化をアプリ起動時に実行
+  useEffect(() => {
+    initDatabase()
+  }, [])
+  
   return (
     <Navigation />
   );

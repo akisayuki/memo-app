@@ -6,7 +6,7 @@ import * as SQLite from 'expo-sqlite'
 const db = await SQLite.openDatabaseAsync('app.db');
 
 //データベースの初期化
-const initDatabase = async () => {
+export const initDatabase = async () => {
     try {
         //entriesテーブルとreferencesテーブルを作成
         await db.execAsync(`
@@ -32,7 +32,7 @@ const initDatabase = async () => {
 }
 
 //データの保存
-const onSaveData = async (title, body, references) => {
+export const onSaveData = async (title, body, references) => {
     try {
         //entriesテーブルにメモのタイトルと本文を挿入
         const entriesResult = await db.runAsync(
