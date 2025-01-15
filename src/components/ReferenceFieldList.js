@@ -21,9 +21,18 @@ const ReferenceFieldList = ({ reference, setReference }) => {
                 newReference
             ]);
         } else {
-            Alert.alert('登録できる参考文献の数は20個までです');
+            Alert.alert('登録できる参考文献の数は20件までです');
         }
     };
+
+    //参考文献フィールドの入力値を取得する
+    const handleReferenceChange = (id, value) => {
+        const updateReference = reference.map((field) => {
+            //idが合致した場合、オブジェクトをコピーして値を変更し、異なる場合はそのままオブジェクトを返す
+            return field.id === id ? { ...field, value } : field
+        });
+        setReference(updateReference);
+    }
 
     //参考文献フィールドを削除する
     const deleteReferenceField = ((id) => {
@@ -51,7 +60,10 @@ const ReferenceFieldList = ({ reference, setReference }) => {
                             color="red"
                             onPress={() => deleteReferenceField(field.id)}
                         />
-                        <InputField {...field} />
+                        <InputField
+                            {...field}
+                            onChangeText={(value) => handleReferenceChange(field.id, value)}
+                        />
                     </View>
                 );
             })}

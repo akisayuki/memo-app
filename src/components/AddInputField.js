@@ -4,6 +4,8 @@ import { useState } from "react";
 import FieldList from "./FieldList";
 import ReferenceFieldList from "./ReferenceFieldList";
 import { StyleSheet, View } from "react-native";
+import { Button } from "@rneui/themed";
+import { onSaveData } from "./DatabaseOperations";
 
 const AddInputField = () => {
     const [title, setTitle] = useState('');
@@ -11,7 +13,7 @@ const AddInputField = () => {
     const [reference, setReference] = useState([
         {
             id: Date.now(),
-            value: reference,
+            value: "",
             placeholder: "URL、書籍名など",
             style: styles.inputLine
         }
@@ -29,6 +31,14 @@ const AddInputField = () => {
                 reference={reference}
                 setReference={setReference}
             />
+            <Button
+                title="保存する"
+                icon={styles.icon}
+                iconContainerStyle={styles.iconContainer}
+                containerStyle={styles.saveButtonContainer}
+                buttonStyle={styles.saveButtonStyle}
+                onPress={() => onSaveData(title, body, reference)}
+            />
         </View>
     );
 }
@@ -44,6 +54,20 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         fontSize: 16,
         maxHeight: 80
+    },
+    saveButtonContainer: {
+        margin: 10,
+        borderRadius: 10
+    },
+    saveButtonStyle: {
+        backgroundColor: '#66ccff'
+    },
+    icon: {
+        name: 'add',
+        color: 'white'
+    },
+    iconContainer: {
+        marginRight: 10
     }
 });
 

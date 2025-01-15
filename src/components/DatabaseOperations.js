@@ -31,32 +31,33 @@ export const initDatabase = async () => {
         console.error('Error initializing database:', error);
     }
 }
-/*
+
 //データの保存
-export const onSaveData = async (title, body, references) => {
+export const onSaveData = async (title, body, reference_list) => {
     try {
+        const db = await SQLite.openDatabaseAsync('app.db');
         //entriesテーブルにメモのタイトルと本文を挿入
         const entriesResult = await db.runAsync(
             'INSERT INTO entries (title, body) VALUES (?, ?);',
             [title, body]
         );
 
-        //referencesテーブルに参考文献を挿入
+        //reference_listテーブルに参考文献を挿入
         const entry_id = entriesResult.lastInsertRowId; //entriesテーブルのidを外部キーとして取得
-        if (references.length > 0) {
-            //runAsync()ではループで一度ずつ実行するため、ここではexecAsync()を利用
-            await db.execAsync(references.map((reference) => {
-                return (
-                    'INSERT INTO references (entry_id, reference) VALUES(?, ?);',
-                    [entry_id, reference]
-                );
-            }));
+        //参考文献データを1行ずつ挿入
+        for (const reference of reference_list) {
+            await db.runAsync(
+                'INSERT INTO reference_list (entry_id, reference) VALUES(?, ?);',
+                [entry_id, reference.value]
+            );
         }
+
+        console.log('Save successfully.');
     } catch (error) {
         console.error('Error saving entries and references:', error);
     }
 }
-
+/*
 //データを取得する
 export const getAllData = async () => {
     try {
