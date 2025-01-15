@@ -6,6 +6,9 @@ import MainScreen from './src/MainScreen';
 import NewEntryScreen from './src/NewEntryScreen';
 import { useEffect } from 'react';
 import { initDatabase } from './src/components/DatabaseOperations';
+import { openDatabaseSync } from 'expo-sqlite';
+import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
+
 
 //Navigationの設定
 const MyStack = createNativeStackNavigator({
@@ -26,6 +29,9 @@ const MyStack = createNativeStackNavigator({
   }
 });
 
+//Drizzle Studioを使用するためにデータベースを開く
+const db = openDatabaseSync('app.db');
+
 const Navigation = createStaticNavigation(MyStack);
 
 export default function App() {
@@ -42,6 +48,9 @@ export default function App() {
     }
     init();
   }, []);
+
+  //Drizzle Studioプラグインをセットアップ
+  useDrizzleStudio(db);
 
   return (
     <Navigation />
