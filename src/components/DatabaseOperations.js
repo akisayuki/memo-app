@@ -75,16 +75,20 @@ export const onSaveData = async (title, body, reference_list) => {
         console.error('Error saving entries and references:', error);
     }
 }
-/*
+
 //データを取得する
 export const getAllData = async () => {
     try {
-        const entriesResult = await db.getAllAsync('SELECT * FROM entries;');
-        const referencesResult = await db.getAllAsync('SELECT * FROM references;');
+        db = await SQLite.openDatabaseAsync('app.db');
 
-        //entriesにreferencesを紐づける(マッピング)
+        //entriesテーブルとreference_listテーブルからデータを取得
+        const entriesResult = await db.getAllAsync('SELECT * FROM entries;');
+        const referenceListResult = await db.getAllAsync('SELECT * FROM reference_list;');
+
+        
+        //entry_idにreference_listの要素を割り当てる
         const referencesMap = {};
-        referencesResult.forEach((reference) => {
+        referenceListResult.forEach((reference) => {
             //referencesMap[entry_id]が存在しない場合、空の配列を追加して初期化
             if (!referencesMap[reference.entry_id]) {
                 referencesMap[reference.entry_id] = [];
@@ -92,14 +96,18 @@ export const getAllData = async () => {
             referencesMap[reference.entry_id].push(reference.reference);
         });
 
-        //各エントリーに対応する参考文献を追加する
-        entriesResult.forEach((entry) => {
-            //対応する値がない場合は、空の配列を追加する
-            return entry.references = referencesMap[entry.id] || [];
+        //entriesにreferencesを紐づける
+        const result = entriesResult.map((entry) => {
+            return (
+                {
+                    ...entry,
+                    reference: referencesMap[entry.id] || []    //referenceMapにデータが存在しない場合、空の配列を紐付け
+                }
+            );
         });
 
-        return entriesResult;
+        return result;
     } catch (error) {
         console.error('Error retrieving entries and references:', error);
     }
-}*/
+}
