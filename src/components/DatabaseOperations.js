@@ -84,7 +84,6 @@ export const getAllData = async () => {
         //entriesテーブルとreference_listテーブルからデータを取得
         const entriesResult = await db.getAllAsync('SELECT * FROM entries;');
         const referenceListResult = await db.getAllAsync('SELECT * FROM reference_list;');
-
         
         //entry_idにreference_listの要素を割り当てる
         const referencesMap = {};
@@ -93,7 +92,11 @@ export const getAllData = async () => {
             if (!referencesMap[reference.entry_id]) {
                 referencesMap[reference.entry_id] = [];
             }
-            referencesMap[reference.entry_id].push(reference.reference);
+            //referenceMapに、それぞれのreferenceのidと内容を追加する
+            referencesMap[reference.entry_id].push({
+                id: reference.id,
+                text: reference.reference
+            });
         });
 
         //entriesにreferencesを紐づける
@@ -105,7 +108,7 @@ export const getAllData = async () => {
                 }
             );
         });
-
+        
         return result;
     } catch (error) {
         console.error('Error retrieving entries and references:', error);

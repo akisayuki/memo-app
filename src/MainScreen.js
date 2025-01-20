@@ -3,7 +3,7 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { FAB } from "@rneui/themed";
 import React, { useState } from "react";
-import { Text, View, StyleSheet, FlatList } from "react-native";
+import { Text, View, StyleSheet, FlatList, Pressable } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getAllData } from "./components/DatabaseOperations";
 
@@ -41,6 +41,23 @@ const MainScreen = ({ route }) => {
                 }
             }, [isDatabaseReady])
         );
+
+        //FlatListで表示された要素をタップすると、詳細画面に遷移を行う
+        const handleNavigate = (item) => {
+            //inputDataに引数itemの中身を渡す
+            navigation.navigate('Detail', { inputData: item });
+        }
+        const renderItem = ({ item }) => {
+            return(
+                <Pressable
+                    onPress={() => handleNavigate(item)}
+                >
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.itemTitle}>{item.title}</Text>
+                    </View>
+                </Pressable>
+            );
+        }
         
     return (
         <SafeAreaProvider>
@@ -49,12 +66,7 @@ const MainScreen = ({ route }) => {
                     data={inputData}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => {
-                        return(
-                            <View style={styles.itemContainer}>
-                                <Text style={styles.itemTitle}>{item.title}</Text>
-                                <Text style={styles.itemText}>{item.body}</Text>
-                            </View>
-                        );
+                        return renderItem({ item });
                     }}
                 />
                 {/* 新規作成ボタンを表示 */}

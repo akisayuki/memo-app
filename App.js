@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { initDatabase } from './src/components/DatabaseOperations';
 import { openDatabaseSync } from 'expo-sqlite';
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
+import DetailScreen from './src/DetailScreen';
 
 
 //Drizzle Studioを使用するためにデータベースを開く
@@ -32,6 +33,12 @@ export default function App() {
         screen: NewEntryScreen,
         options: {
           title: '新規作成'
+        }
+      },
+      Detail: {
+        screen: DetailScreen,
+        options: {
+          title: '詳細'
         }
       }
     }
