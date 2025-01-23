@@ -114,3 +114,26 @@ export const getAllData = async () => {
         console.error('Error retrieving entries and references:', error);
     }
 }
+
+//メモ(レコード)を削除する
+export const deleteRecord = async (entryId) => {
+    try {
+        const db = await SQLite.openDatabaseAsync('app.db');
+
+        //対応するentriesテーブルとreference_listテーブルを、idをキーにして削除
+        //entiresテーブルを先に削除すると、reference_listが参照する外部キーが消滅するため、reference_listテーブルを先に削除する
+        await db.runAsync(
+            'DELETE FROM reference_list WHERE entry_id = ?;',
+            [entryId]
+        );
+        await db.runAsync(
+            'DELETE FROM entries WHERE id = ?;',
+            [entryId]
+        );
+
+        console.log('Delete successfully.');
+        
+    } catch (error) {
+        console.error('Failed to delete data:', error);
+    }
+}
