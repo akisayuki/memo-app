@@ -3,57 +3,64 @@
 import { useState } from "react";
 import FieldList from "./FieldList";
 import ReferenceFieldList from "./ReferenceFieldList";
-import { StyleSheet, View } from "react-native";
+import {
+    Keyboard,
+    KeyboardAvoidingView,
+    ScrollView,
+    StyleSheet,
+    TouchableWithoutFeedback } from "react-native";
 import { Button } from "@rneui/themed";
-import { onSaveData } from "./DatabaseOperations";
-import { useNavigation } from "@react-navigation/native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-const AddInputField = () => {
-    const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
+//初期値を設定することで、編集と新規作成の両方に対応
+const AddInputField = ({ initialParams = { title: '', body: '', reference: []}, onSubmit }) => {
+    const [title, setTitle] = useState(initialParams.title);
+    const [body, setBody] = useState(initialParams.body);
     const [reference, setReference] = useState([
         {
             id: Date.now(),
-            value: "",
+            value: initialParams.reference,
             placeholder: "URL、書籍名など",
             style: styles.inputLine
         }
     ]);
 
-    const navigation = useNavigation();
-
-    //保存と画面遷移を非同期で行うイベントハンドラ
-    const handleSave = async () => {
-        try {
-            //保存を行ってから画面遷移を実行
-            await onSaveData(title, body, reference);
-            navigation.goBack();
-        } catch (error) {
-            console.error('Error saving or going back:', error);
-        }
-    }
-
     return(
-        <View>
-            <FieldList
-                title={title}
-                setTitle={setTitle}
-                body={body}
-                setBody={setBody}
-            />
-            <ReferenceFieldList
-                reference={reference}
-                setReference={setReference}
-            />
-            <Button
-                title="保存する"
-                icon={styles.icon}
-                iconContainerStyle={styles.iconContainer}
-                containerStyle={styles.saveButtonContainer}
-                buttonStyle={styles.saveButtonStyle}
-                onPress={handleSave}
-            />
-        </View>
+        <SafeAreaProvider>
+            <SafeAreaView style={styles.container}>
+                <TouchableWithoutFeedback
+                    onPress={() => {
+                        Keyboard.dismiss();
+                }}>
+                    <KeyboardAvoidingView
+                        behavior={"padding"}
+                    >
+                        <ScrollView
+                            keyboardDismissMode="on-drag"
+                        >
+                            <FieldList
+                                title={title}
+                                setTitle={setTitle}
+                                body={body}
+                                setBody={setBody}
+                            />
+                            <ReferenceFieldList
+                                reference={reference}
+                                setReference={setReference}
+                            />
+                            <Button
+                                title="保存する"
+                                icon={styles.icon}
+                                iconContainerStyle={styles.iconContainer}
+                                containerStyle={styles.saveButtonContainer}
+                                buttonStyle={styles.saveButtonStyle}
+                                onPress={() => onSubmit(title, body, reference)}
+                            />
+                        </ScrollView>
+                    </KeyboardAvoidingView>
+                </TouchableWithoutFeedback>
+            </SafeAreaView>
+        </SafeAreaProvider>
     );
 }
 
