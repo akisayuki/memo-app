@@ -66,15 +66,27 @@ export const onSaveData = async (title, body, reference_list) => {
         for (const reference of reference_list) {
             await db.runAsync(
                 'INSERT INTO reference_list (entry_id, reference) VALUES(?, ?);',
-                [entry_id, reference.value]
+                [entry_id, reference]
             );
         }
-
+        
         console.log('Save successfully.');
     } catch (error) {
         console.error('Error saving entries and references:', error);
     }
 }
+
+//データを編集する
+/*export const updateData = async (title, body, reference_list) => {
+    try {
+        const db = await SQLite.openDatabaseAsync('app.db');
+        
+        //編集処理を行う
+        await db.runAsync('UPDATE entries ')
+    } catch (error) {
+        
+    }
+}*/
 
 //データを取得する
 export const getAllData = async () => {

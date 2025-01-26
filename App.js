@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { createStaticNavigation } from '@react-navigation/native';
+import { createStaticNavigation, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainScreen from './src/MainScreen';
 import NewEntryScreen from './src/NewEntryScreen';
@@ -9,6 +8,8 @@ import { initDatabase } from './src/components/DatabaseOperations';
 import { openDatabaseSync } from 'expo-sqlite';
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
 import DetailScreen from './src/DetailScreen';
+import EditEntryScreen from './src/EditEntryScreen';
+import { Button } from 'react-native';
 
 
 //Drizzle Studioを使用するためにデータベースを開く
@@ -17,6 +18,24 @@ const db = openDatabaseSync('app.db');
 export default function App() {
   //データベースが作成されているかをstateで管理
   const [isDatabaseReady, setIsDatabaseReady] = useState(false);
+
+  //データベースの初期化をアプリ起動時に実行
+  useEffect(() => {
+    //useEffectで非同期関数を使う場合は、ラップ関数を定義して呼び出す必要がある
+    const init = async () => {
+      try {
+        await initDatabase();
+        setIsDatabaseReady(true); //データベースの状態を準備完了に設定
+        console.log('Database initialized successfully.');
+      } catch (error) {
+        console.error('Error initializing database:', error);
+      }
+    }
+    init();
+  }, []);
+
+  //Drizzle Studioプラグインをセットアップ
+  useDrizzleStudio(db);
 
   //Navigationの設定
   const MyStack = createNativeStackNavigator({
@@ -37,31 +56,33 @@ export default function App() {
       },
       Detail: {
         screen: DetailScreen,
+        options: ({ route, navigation }) => {
+          return (
+            {
+              title: '詳細',
+              headerRight: () => {
+                return (
+                  <Button
+                    title="編集する"
+                    onPress={() => {
+                      return navigation.navigate('Edit', { inputData: route.params.inputData });
+                    }}
+                  />
+                );
+              }
+            }
+          );
+        }
+      },
+      Edit: {
+        screen: EditEntryScreen,
         options: {
-          title: '詳細'
+          title: '編集'
         }
       }
     }
   });
   const Navigation = createStaticNavigation(MyStack);
-
-  //データベースの初期化をアプリ起動時に実行
-  useEffect(() => {
-    //useEffectで非同期関数を使う場合は、ラップ関数を定義して呼び出す必要がある
-    const init = async () => {
-      try {
-        await initDatabase();
-        setIsDatabaseReady(true); //データベースの状態を準備完了に設定
-        console.log('Database initialized successfully.');
-      } catch (error) {
-        console.error('Error initializing database:', error);
-      }
-    }
-    init();
-  }, []);
-
-  //Drizzle Studioプラグインをセットアップ
-  useDrizzleStudio(db);
 
   return (
     <Navigation />

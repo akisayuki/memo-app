@@ -12,18 +12,37 @@ import {
 import { Button } from "@rneui/themed";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-//初期値を設定することで、編集と新規作成の両方に対応
-const AddInputField = ({ initialParams = { title: '', body: '', reference: []}, onSubmit }) => {
-    const [title, setTitle] = useState(initialParams.title);
-    const [body, setBody] = useState(initialParams.body);
-    const [reference, setReference] = useState([
-        {
-            id: Date.now(),
-            value: initialParams.reference,
-            placeholder: "URL、書籍名など",
-            style: styles.inputLine
-        }
-    ]);
+/*
+初期値を設定することで、編集と新規作成の両画面に対応
+親からpropsとしてデータを受け取る
+*/
+const AddInputField = ({ formData, onSubmit, onSave }) => {
+    /*
+    reference配列の整形
+    stateで管理し、再レンダリングを防ぐ
+    refに渡されるのは参考文献リストの配列(formData.reference)の中身(id, text)
+    */
+    const [localReference, setLocalReference] = useState(() =>
+        formData.reference.map((ref) => {
+            return (
+                {
+                    id: ref.id, //inputDataから渡されたid
+                    value: ref.text,    //inputDataから渡されたtext
+                    placeholder: 'URL、書籍名など',
+                    style: styles.inputLine
+                }
+            )
+        })
+    );
+
+    //ReferenceFieldListのsetReferenceに渡すイベントハンドラ
+    const handleReferenceChange = (newReference) => {
+        setLocalReference(newReference);
+        //valueのみを更新
+        onSubmit({
+            reference: newReference.map((ref) => ref.value)
+        });
+    }
 
     return(
         <SafeAreaProvider>
@@ -39,14 +58,16 @@ const AddInputField = ({ initialParams = { title: '', body: '', reference: []}, 
                             keyboardDismissMode="on-drag"
                         >
                             <FieldList
-                                title={title}
-                                setTitle={setTitle}
-                                body={body}
-                                setBody={setBody}
+                                title={formData.title}
+                                setTitle={(newTitle) => onSubmit({ title: newTitle })}
+                                body={formData.body}
+                                setBody={(newBody) =>
+                                    onSubmit({ body: newBody })
+                                }
                             />
                             <ReferenceFieldList
-                                reference={reference}
-                                setReference={setReference}
+                                reference={localReference}
+                                setReference={handleReferenceChange}
                             />
                             <Button
                                 title="保存する"
@@ -54,7 +75,7 @@ const AddInputField = ({ initialParams = { title: '', body: '', reference: []}, 
                                 iconContainerStyle={styles.iconContainer}
                                 containerStyle={styles.saveButtonContainer}
                                 buttonStyle={styles.saveButtonStyle}
-                                onPress={() => onSubmit(title, body, reference)}
+                                onPress={onSave}
                             />
                         </ScrollView>
                     </KeyboardAvoidingView>
