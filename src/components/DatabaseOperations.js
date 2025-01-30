@@ -50,10 +50,11 @@ export const initDatabase = async () => {
     }
 }
 
-//データの保存
+//データの新規保存
 export const onSaveData = async (title, body, reference_list) => {
     try {
         const db = await SQLite.openDatabaseAsync('app.db');
+        
         //entriesテーブルにメモのタイトルと本文を挿入
         const entriesResult = await db.runAsync(
             'INSERT INTO entries (title, body) VALUES (?, ?);',
@@ -64,10 +65,13 @@ export const onSaveData = async (title, body, reference_list) => {
         const entry_id = entriesResult.lastInsertRowId; //entriesテーブルのidを外部キーとして取得
         //参考文献データを1行ずつ挿入
         for (const reference of reference_list) {
-            await db.runAsync(
-                'INSERT INTO reference_list (entry_id, reference) VALUES(?, ?);',
-                [entry_id, reference.value]
-            );
+            //isDeletedフラグがfalseの時のみ、データを挿入
+            if (!reference.isDeleted) {
+                await db.runAsync(
+                    'INSERT INTO reference_list (entry_id, reference) VALUES(?, ?);',
+                    [entry_id, reference.value]
+                );
+            }
         }
         
         console.log('Save successfully.');
