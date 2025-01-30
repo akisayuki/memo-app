@@ -34,7 +34,7 @@ export const initDatabase = async () => {
         await db.execAsync(`
             CREATE TABLE IF NOT EXISTS entries(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT,
+                title TEXT NOT NULL,
                 body TEXT
             );
         
@@ -66,7 +66,7 @@ export const onSaveData = async (title, body, reference_list) => {
         for (const reference of reference_list) {
             await db.runAsync(
                 'INSERT INTO reference_list (entry_id, reference) VALUES(?, ?);',
-                [entry_id, reference]
+                [entry_id, reference.value]
             );
         }
         
@@ -77,16 +77,58 @@ export const onSaveData = async (title, body, reference_list) => {
 }
 
 //データを編集する
-/*export const updateData = async (title, body, reference_list) => {
+export const updateData = async (entriesId, title, body, reference_list) => {
     try {
         const db = await SQLite.openDatabaseAsync('app.db');
         
-        //編集処理を行う
-        await db.runAsync('UPDATE entries ')
+        /*
+        reference_listテーブルのreferenceを、entry_idとidを取得して更新
+        reference.idが存在しない、すなわち新しくデータを追加する場合とで条件分岐
+        */
+        for (const reference of reference_list) {
+            /*
+            削除フラグ(isDeleted)が立っている場合はデータを削除
+            新規作成フラグ(isNew)が立っている場合はデータを挿入
+            */
+            if (reference.isDeleted) {
+                await db.runAsync(
+                    'DELETE FROM reference_list WHERE entry_id = ? AND id = ?;',
+                    [entriesId, reference.id]
+                );
+                console.log(`Deleted reference: entry_id=${entriesId}, id=${reference.id}`);
+                
+            } else if (reference.isNew) {
+                await db.runAsync(
+                    'INSERT INTO reference_list (entry_id, reference) VALUES(?, ?);',
+                    [entriesId, reference.value]
+                );
+            } else {
+                await db.runAsync(
+                    'UPDATE reference_list SET reference = ? WHERE entry_id = ? AND id = ?;',
+                    [reference.value, entriesId, reference.id]
+                );
+            }
+            
+        }
+        //entiresテーブルのtitleとbodyを、idを取得して更新
+        await db.runAsync(
+            'UPDATE entries SET title = ?, body = ? WHERE id = ?;',
+            [title, body, entriesId]
+        );
+
+        //更新されたデータを取得
+        const getEntriesResult = await db.getFirstAsync('SELECT * FROM entries WHERE id = ?;', [entriesId]);
+        const getReferenceResult = await db.getAllAsync('SELECT * FROM reference_list WHERE entry_id = ?;', [entriesId]);
+        return (
+            {
+                ...getEntriesResult,
+                reference: getReferenceResult
+            }
+        );
     } catch (error) {
-        
+        console.error('Failed to update entries or reference_list:', error);
     }
-}*/
+}
 
 //データを取得する
 export const getAllData = async () => {

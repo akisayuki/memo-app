@@ -38,7 +38,7 @@ const MainScreen = ({ route }) => {
                 //クリーンアップ関数
                 return () => {
                     isActive = false;   //アンマウント時にfetchDataを中止
-                }
+                };
             }, [isDatabaseReady])
         );
 

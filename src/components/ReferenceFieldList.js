@@ -12,7 +12,9 @@ const ReferenceFieldList = ({ reference, setReference }) => {
             id: Date.now(),
             value: "",
             placeholder: referencePlaceholder,
-            style: styles.inputLine
+            style: styles.inputLine,
+            isNew: true, //新規作成データであるかどうかのフラグ
+            isDeleted: false    //削除対象のデータであるかのフラグ
         };
         //上限に達するとアラートを表示
         if (reference.length < 20) {
@@ -32,16 +34,25 @@ const ReferenceFieldList = ({ reference, setReference }) => {
             return field.id === id ? { ...field, value } : field
         });
         setReference(updateReference);
-    }
+    };
 
     //参考文献フィールドを削除する
-    const deleteReferenceField = ((id) => {
-        setReference(
-            reference.filter((field) => {
-                return field.id !== id
-            })
-        );
-    });
+    const deleteReferenceField = (id) => {
+        setReference((prevReferences) => {
+            //prevReferenceに配列が渡されていない場合は、ログを出力して空の配列を返す
+            if (!Array.isArray(prevReferences)) {
+                console.error('prevReferences are not an array:', prevReferences);
+                return [];
+            }
+            
+            //map関数で各データ(ref)に削除対象のデータを判定してフラグを立てる
+            const setDeletedFlag = prevReferences.map((ref) => 
+                ref.id === id ? { ...ref, isDeleted: true} :ref
+            );
+            
+            return setDeletedFlag;
+        });
+    };
 
     return (
         <View>
@@ -52,7 +63,7 @@ const ReferenceFieldList = ({ reference, setReference }) => {
                     onPress={addReferenceField}
                 />
             </View>
-            {reference.map((field) => {
+            {reference.filter((ref) => !ref.isDeleted).map((field) => {
                 return(
                     <View key={field.id} style={styles.inputContainer}>
                         <Button

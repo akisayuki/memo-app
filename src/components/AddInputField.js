@@ -14,35 +14,55 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 /*
 初期値を設定することで、編集と新規作成の両画面に対応
-親からpropsとしてデータを受け取る
+親からpropsとしてデータと保存関数を受け取る
 */
-const AddInputField = ({ formData, onSubmit, onSave }) => {
+const AddInputField = ({ initialData, onSave }) => {
     /*
     reference配列の整形
     stateで管理し、再レンダリングを防ぐ
     refに渡されるのは参考文献リストの配列(formData.reference)の中身(id, text)
     */
-    const [localReference, setLocalReference] = useState(() =>
-        formData.reference.map((ref) => {
-            return (
-                {
-                    id: ref.id, //inputDataから渡されたid
-                    value: ref.text,    //inputDataから渡されたtext
-                    placeholder: 'URL、書籍名など',
-                    style: styles.inputLine
-                }
-            )
-        })
-    );
+    const [formData, setFormData] = useState(() => {
+        return (
+            {
+                ...initialData,
+                reference: initialData.reference.map((ref) => {
+                    return (
+                        {
+                            id: ref.id, //inputDataから渡されたid
+                            value: ref.text,    //inputDataから渡されたtext
+                            placeholder: 'URL、書籍名など',
+                            style: styles.inputLine
+                        }
+                    );
+                })
+            }
+        );
+    });
 
-    //ReferenceFieldListのsetReferenceに渡すイベントハンドラ
-    const handleReferenceChange = (newReference) => {
-        setLocalReference(newReference);
-        //valueのみを更新
-        onSubmit({
-            reference: newReference.map((ref) => ref.value)
-        });
-    }
+    //参考文献リストの入力変更を操作するイベントハンドラ
+    const handleInputReferenceChange = (newReference) => {
+        //newReferenceに関数が渡されているときは、関数を実行
+        if (typeof newReference === 'function') {
+            setFormData((prev) => {
+                return (
+                    {
+                        ...prev,
+                        reference: newReference(prev.reference)
+                    }
+                );
+            });
+        } else {
+            setFormData((prev) => {
+                return (
+                    {
+                        ...prev,
+                        reference: newReference
+                    }
+                )
+            })
+        }
+    };
 
     return(
         <SafeAreaProvider>
@@ -59,15 +79,18 @@ const AddInputField = ({ formData, onSubmit, onSave }) => {
                         >
                             <FieldList
                                 title={formData.title}
-                                setTitle={(newTitle) => onSubmit({ title: newTitle })}
+                                setTitle={(newTitle) =>
+                                    setFormData((prev) => 
+                                        ({ ...prev, title: newTitle }))}
                                 body={formData.body}
                                 setBody={(newBody) =>
-                                    onSubmit({ body: newBody })
+                                    setFormData((prev) =>
+                                        ({ ...prev, body: newBody }))
                                 }
                             />
                             <ReferenceFieldList
-                                reference={localReference}
-                                setReference={handleReferenceChange}
+                                reference={formData.reference}
+                                setReference={handleInputReferenceChange}
                             />
                             <Button
                                 title="保存する"
@@ -75,7 +98,7 @@ const AddInputField = ({ formData, onSubmit, onSave }) => {
                                 iconContainerStyle={styles.iconContainer}
                                 containerStyle={styles.saveButtonContainer}
                                 buttonStyle={styles.saveButtonStyle}
-                                onPress={onSave}
+                                onPress={() => onSave(formData)}
                             />
                         </ScrollView>
                     </KeyboardAvoidingView>
