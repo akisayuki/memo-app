@@ -1,14 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { createStaticNavigation, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import MainScreen from './src/MainScreen';
-import NewEntryScreen from './src/NewEntryScreen';
+import MainScreen from './src/screens/MainScreen';
+import NewEntryScreen from './src/screens/NewEntryScreen';
 import { useEffect, useState } from 'react';
 import { initDatabase } from './src/components/DatabaseOperations';
 import { openDatabaseSync } from 'expo-sqlite';
 import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
-import DetailScreen from './src/DetailScreen';
-import EditEntryScreen from './src/EditEntryScreen';
+import DetailScreen from './src/screens/DetailScreen';
+import EditEntryScreen from './src/screens/EditEntryScreen';
 import { Button } from 'react-native';
 
 

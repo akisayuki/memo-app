@@ -99,8 +99,6 @@ export const updateData = async (entriesId, title, body, reference_list) => {
                     'DELETE FROM reference_list WHERE entry_id = ? AND id = ?;',
                     [entriesId, reference.id]
                 );
-                console.log(`Deleted reference: entry_id=${entriesId}, id=${reference.id}`);
-                
             } else if (reference.isNew) {
                 await db.runAsync(
                     'INSERT INTO reference_list (entry_id, reference) VALUES(?, ?);',

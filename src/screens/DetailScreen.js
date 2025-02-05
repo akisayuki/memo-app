@@ -2,7 +2,7 @@
 
 import { View, Text, StyleSheet, FlatList, Button, Alert } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { deleteRecord } from "./components/DatabaseOperations";
+import { deleteRecord } from "../components/DatabaseOperations";
 import { useNavigation } from "@react-navigation/native";
 
 

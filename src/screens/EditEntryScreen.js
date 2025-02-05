@@ -1,8 +1,8 @@
 //メモの編集を行う画面
 
 import { useNavigation } from "@react-navigation/native";
-import AddInputField from "./components/AddInputField";
-import { updateData } from "./components/DatabaseOperations";
+import AddInputField from "../components/AddInputField";
+import { updateData } from "../components/DatabaseOperations";
 
 
 const EditEntryScreen = ({ route }) => {

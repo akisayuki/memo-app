@@ -1,8 +1,8 @@
 //新規作成画面
 
 import React from "react";
-import AddInputField from "./components/AddInputField";
-import { onSaveData } from "./components/DatabaseOperations";
+import AddInputField from "../components/AddInputField";
+import { onSaveData } from "../components/DatabaseOperations";
 import { useNavigation } from "@react-navigation/native";
 
 const NewEntryScreen = () => {

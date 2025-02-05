@@ -5,7 +5,7 @@ import { FAB } from "@rneui/themed";
 import React, { useState } from "react";
 import { Text, View, StyleSheet, FlatList, Pressable } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { getAllData } from "./components/DatabaseOperations";
+import { getAllData } from "../components/DatabaseOperations";
 
 
 const MainScreen = ({ route }) => {
