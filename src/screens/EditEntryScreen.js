@@ -35,8 +35,8 @@ const EditEntryScreen = ({ route }) => {
                 editData.reference
             );
 
-            navigation.setParams({ inputData: updateEntry });
-            navigation.navigate('Home');
+            //popToで前の画面(詳細画面)にデータを渡す
+            navigation.popTo('Detail', { inputData: updateEntry });
         } catch (error) {
             console.error('Failed to update or go back:', error);
         }

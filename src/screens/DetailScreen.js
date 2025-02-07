@@ -1,5 +1,6 @@
 //各データを列挙して表示する画面
 
+import React from "react";
 import { View, Text, StyleSheet, FlatList, Button, Alert } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { deleteRecord } from "../components/DatabaseOperations";
@@ -11,7 +12,7 @@ const DetailScreen = ({ route }) => {
     const { inputData } = route.params;
 
     //ヘッダーとしてタイトルと本文を設定することで、スクロールが可能
-    const listHeaderComponent = () => {
+    const headerItem = () => {
         return(
             <View style={styles.itemContainer}>
                 <Text style={styles.title}>{inputData.title}</Text>
@@ -45,7 +46,7 @@ const DetailScreen = ({ route }) => {
     }
 
     //フッターとして削除ボタンを配置
-    const listFooterComponent = () => {
+    const footerDeleteButton = () => {
         return (
             <Button
                 title="このメモを削除する"
@@ -61,11 +62,11 @@ const DetailScreen = ({ route }) => {
                 <FlatList
                     data={inputData.reference}
                     keyExtractor={item => item.id}
-                    ListHeaderComponent={listHeaderComponent}
+                    ListHeaderComponent={headerItem}
                     renderItem={({ item }) => {
-                        return <Text style={styles.reference}>{item.text}</Text>;
+                        return <Text style={styles.reference}>{item.reference}</Text>;
                     }}
-                    ListFooterComponent={listFooterComponent}
+                    ListFooterComponent={footerDeleteButton}
                 />
             </SafeAreaView>
         </SafeAreaProvider>

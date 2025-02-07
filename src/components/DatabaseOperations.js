@@ -151,7 +151,7 @@ export const getAllData = async () => {
             //referenceMapに、それぞれのreferenceのidと内容を追加する
             referencesMap[reference.entry_id].push({
                 id: reference.id,
-                text: reference.reference
+                reference: reference.reference
             });
         });
 

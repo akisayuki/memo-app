@@ -30,7 +30,7 @@ const AddInputField = ({ initialData, onSave }) => {
                     return (
                         {
                             id: ref.id, //inputDataから渡されたid
-                            value: ref.text,    //inputDataから渡されたtext
+                            value: ref.reference,    //inputDataから渡されたreference
                             placeholder: 'URL、書籍名など',
                             style: styles.inputLine
                         }
