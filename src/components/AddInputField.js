@@ -4,6 +4,7 @@ import { useState } from "react";
 import FieldList from "./FieldList";
 import ReferenceFieldList from "./ReferenceFieldList";
 import {
+    Alert,
     Keyboard,
     KeyboardAvoidingView,
     ScrollView,
@@ -11,10 +12,11 @@ import {
     TouchableWithoutFeedback } from "react-native";
 import { Button } from "@rneui/themed";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation, usePreventRemove } from "@react-navigation/native";
 
 /*
 初期値を設定することで、編集と新規作成の両画面に対応
-親からpropsとしてデータと保存関数を受け取る
+propsとしてデータと保存関数を受け取る
 */
 const AddInputField = ({ initialData, onSave }) => {
     /*
@@ -40,6 +42,31 @@ const AddInputField = ({ initialData, onSave }) => {
         );
     });
 
+    //保存状態(内容の変更)を監視するstate
+    const [isUnsaved, setIsUnsaved] = useState(false);
+    const navigation = useNavigation();
+
+    //入力を保存する前に画面遷移を行うと、確認アラートを表示
+    //TODO 一度キャンセルを押すとボタンのUIが押された状態になるのを改善する
+    usePreventRemove(isUnsaved, ({ data }) => {
+        Alert.alert(
+            '変更が保存されていません',
+            '入力を破棄します。よろしいですか？',
+            [
+                {
+                    text: 'キャンセル',
+                    style: 'cancel',
+                    onPress: () => {}
+                },
+                {
+                    text: '破棄',
+                    style: 'destructive',
+                    onPress: () => navigation.dispatch(data.action)
+                }
+            ]
+        );
+    });
+
     //参考文献リストの入力変更を操作するイベントハンドラ
     const handleInputReferenceChange = (newReference) => {
         //newReferenceに関数が渡されているときは、関数を実行
@@ -52,6 +79,7 @@ const AddInputField = ({ initialData, onSave }) => {
                     }
                 );
             });
+            setIsUnsaved(true); //内容の変更を管理
         } else {
             setFormData((prev) => {
                 return (
@@ -59,8 +87,9 @@ const AddInputField = ({ initialData, onSave }) => {
                         ...prev,
                         reference: newReference
                     }
-                )
-            })
+                );
+            });
+            setIsUnsaved(true);
         }
     };
 
@@ -79,14 +108,17 @@ const AddInputField = ({ initialData, onSave }) => {
                         >
                             <FieldList
                                 title={formData.title}
-                                setTitle={(newTitle) =>
+                                setTitle={(newTitle) => {
                                     setFormData((prev) => 
-                                        ({ ...prev, title: newTitle }))}
+                                        ({ ...prev, title: newTitle }));
+                                    setIsUnsaved(true);
+                                }}
                                 body={formData.body}
-                                setBody={(newBody) =>
+                                setBody={(newBody) => {
                                     setFormData((prev) =>
-                                        ({ ...prev, body: newBody }))
-                                }
+                                        ({ ...prev, body: newBody }));
+                                    setIsUnsaved(true);
+                                }}
                             />
                             <ReferenceFieldList
                                 reference={formData.reference}
@@ -98,7 +130,10 @@ const AddInputField = ({ initialData, onSave }) => {
                                 iconContainerStyle={styles.iconContainer}
                                 containerStyle={styles.saveButtonContainer}
                                 buttonStyle={styles.saveButtonStyle}
-                                onPress={() => onSave(formData)}
+                                onPress={() => {
+                                    setIsUnsaved(false);    //アラートを解除
+                                    onSave(formData);
+                                }}
                             />
                         </ScrollView>
                     </KeyboardAvoidingView>
