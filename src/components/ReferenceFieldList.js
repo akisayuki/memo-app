@@ -2,8 +2,11 @@
 
 import { Alert, Text, StyleSheet, View, Button } from "react-native";
 import InputField from "./InputField";
+import { useRef } from "react";
 
-const ReferenceFieldList = ({ reference, setReference }) => {
+const ReferenceFieldList = ({ reference, setReference, onFocus }) => {
+    const inputRef = useRef(null);
+
     //参考文献フィールドを追加する
     const addReferenceField = () => {
         const referencePlaceholder = "URL、書籍名など";
@@ -74,6 +77,12 @@ const ReferenceFieldList = ({ reference, setReference }) => {
                         <InputField
                             {...field}
                             onChangeText={(value) => handleReferenceChange(field.id, value)}
+                            ref={(ref) => (inputRef.current = ref)}
+                            onFocus={() => {
+                                inputRef.current.measure((x, y, width, height, pageX, pageY) => {
+                                    onFocus(pageY);
+                                });
+                            }}
                         />
                     </View>
                 );

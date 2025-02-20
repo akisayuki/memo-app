@@ -2,8 +2,11 @@
 
 import { StyleSheet, View, Text } from "react-native";
 import InputField from "./InputField";
+import { useRef } from "react";
 
-const FieldList = ({ title, setTitle, body, setBody}) => {
+const FieldList = ({ title, setTitle, body, setBody, onFocus }) => {
+    const inputRef = useRef(null);
+
     //InputFieldに渡すタイトルと本文の要素
     const settingItems = [
         {
@@ -27,10 +30,19 @@ const FieldList = ({ title, setTitle, body, setBody}) => {
         return(
             <View key={data.id}>
                 <Text style={styles.text}>{data.placeholder}</Text>
-                <InputField {...data} />
+                <InputField
+                    {...data}
+                    ref={(ref) => (inputRef.current = ref)}
+                    onFocus={() => {
+                        //ページ全体に対してのフォームの位置を取得し、onFocusに渡す
+                        inputRef.current.measure((x, y, width, height, pageX, pageY) => {
+                            onFocus(pageY);
+                        });
+                    }}
+                />
             </View>
         );
-    })
+    });
 }
 
 const styles = StyleSheet.create({
@@ -51,8 +63,8 @@ const styles = StyleSheet.create({
         borderColor: 'silver',
         borderWidth: 1,
         fontSize: 16,
-        maxHeight: 300
+        maxHeight: 250
     }
-})
+});
 
 export default FieldList;
