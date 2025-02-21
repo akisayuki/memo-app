@@ -41,19 +41,15 @@ const AddInputField = ({ initialData, onSave }) => {
         );
     });
 
-    //保存状態(内容の変更)を監視するstate
-    const [isUnsaved, setIsUnsaved] = useState(false);
+    //内容の変更を監視するstate
+    const [isEdited, setIsEdited] = useState(false);
+
     const navigation = useNavigation();
     const scrollPositionRef = useRef(null);
 
-    //渡されたyの値を元に、特定位置にスクロール
-    const handleFocus = (y) => {
-        scrollPositionRef.current.scrollToPosition(0, y - 200, true);
-    }
-
     //入力を保存する前に画面遷移を行うと、確認アラートを表示
     //TODO 一度キャンセルを押すとボタンのUIが押されたままの状態になるのを改善する
-    usePreventRemove(isUnsaved, ({ data }) => {
+    usePreventRemove(isEdited, ({ data }) => {
         Alert.alert(
             '変更が保存されていません',
             '入力を破棄します。よろしいですか？',
@@ -72,6 +68,12 @@ const AddInputField = ({ initialData, onSave }) => {
         );
     });
 
+    //渡されたyの値を元に、特定位置にスクロール
+    const handleFocus = (y) => {
+        scrollPositionRef.current.scrollToPosition(0, y - 200, true);
+    }
+    
+
     //参考文献リストの入力変更を操作するイベントハンドラ
     const handleInputReferenceChange = (newReference) => {
         //newReferenceに関数が渡されているときは、関数を実行
@@ -84,7 +86,7 @@ const AddInputField = ({ initialData, onSave }) => {
                     }
                 );
             });
-            setIsUnsaved(true); //内容の変更を管理
+            setIsEdited(true); //内容の変更を管理
         } else {
             setFormData((prev) => {
                 return (
@@ -94,9 +96,29 @@ const AddInputField = ({ initialData, onSave }) => {
                     }
                 );
             });
-            setIsUnsaved(true);
+            setIsEdited(true);
         }
     };
+
+    //保存ボタンを押した時、未入力のタイトルや未削除の参考文献リストがある場合はアラートを表示
+    const onPressSave = () => {
+        //タイトルが未入力の場合にアラートを表示
+        if (!formData.title.trim()) {
+            Alert.alert('タイトルを入力してください');
+            return;
+        }
+
+        //まだ削除されておらず、値が未入力な参考文献フォームを検出
+        const emptyReferenceFields = formData.reference
+            .some(ref => !ref.isDeleted && !ref.value.trim());
+        if (emptyReferenceFields) {
+            Alert.alert('未入力の参考文献フォームは削除してください');
+            return;
+        }
+
+        onSave(formData);
+        setIsEdited(false);
+    }
 
     return(
         <SafeAreaProvider>
@@ -117,13 +139,13 @@ const AddInputField = ({ initialData, onSave }) => {
                             setTitle={(newTitle) => {
                                 setFormData((prev) => 
                                     ({ ...prev, title: newTitle }));
-                                setIsUnsaved(true);
+                                setIsEdited(true);
                             }}
                             body={formData.body}
                             setBody={(newBody) => {
                                 setFormData((prev) =>
                                     ({ ...prev, body: newBody }));
-                                setIsUnsaved(true);
+                                setIsEdited(true);
                             }}
                             onFocus={handleFocus}
                         />
@@ -138,11 +160,7 @@ const AddInputField = ({ initialData, onSave }) => {
                             iconContainerStyle={styles.iconContainer}
                             containerStyle={styles.saveButtonContainer}
                             buttonStyle={styles.saveButtonStyle}
-                            onPress={() => {
-                                //FIXME 一度保存ボタンを押すとアラートが解除され、未保存でも画面遷移できてしまう
-                                setIsUnsaved(false);    //アラートを解除
-                                onSave(formData);
-                            }}
+                            onPress={onPressSave}
                         />
                     </KeyboardAwareScrollView>
                 </TouchableWithoutFeedback>

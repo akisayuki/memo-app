@@ -13,21 +13,6 @@ const EditEntryScreen = ({ route }) => {
     //更新用のイベントハンドラ
     const handleUpdate = async (editData) => {
         try {
-            //タイトルが空の場合、アラートを表示
-            if (!editData.title.trim()) {
-                Alert.alert('タイトルを入力してください');
-                return;
-            }
-
-            //isDeletedフラグが立っている、かつ値が未入力なものを検出
-            const emptyReferenceFields = editData.reference
-                .some(ref => !ref.isDeleted && !ref.value.trim());
-
-            if (emptyReferenceFields) {
-                Alert.alert('未入力の参考文献フォームは削除してください');
-                return;
-            }
-
             const updateEntry = await updateData(
                 editData.id,
                 editData.title,
