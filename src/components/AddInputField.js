@@ -1,6 +1,6 @@
 //入力フィールドを追加
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import FieldList from "./FieldList";
 import ReferenceFieldList from "./ReferenceFieldList";
 import {
@@ -43,9 +43,7 @@ const AddInputField = ({ initialData, onSave }) => {
 
     //内容の変更を監視するstate
     const [isEdited, setIsEdited] = useState(false);
-
     const navigation = useNavigation();
-    const scrollPositionRef = useRef(null);
 
     //入力を保存する前に画面遷移を行うと、確認アラートを表示
     //TODO 一度キャンセルを押すとボタンのUIが押されたままの状態になるのを改善する
@@ -67,12 +65,6 @@ const AddInputField = ({ initialData, onSave }) => {
             ]
         );
     });
-
-    //渡されたyの値を元に、特定位置にスクロール
-    const handleFocus = (y) => {
-        scrollPositionRef.current.scrollToPosition(0, y - 200, true);
-    }
-    
 
     //参考文献リストの入力変更を操作するイベントハンドラ
     const handleInputReferenceChange = (newReference) => {
@@ -107,7 +99,6 @@ const AddInputField = ({ initialData, onSave }) => {
             Alert.alert('タイトルを入力してください');
             return;
         }
-
         //まだ削除されておらず、値が未入力な参考文献フォームを検出
         const emptyReferenceFields = formData.reference
             .some(ref => !ref.isDeleted && !ref.value.trim());
@@ -115,7 +106,6 @@ const AddInputField = ({ initialData, onSave }) => {
             Alert.alert('未入力の参考文献フォームは削除してください');
             return;
         }
-
         onSave(formData);
         setIsEdited(false);
     }
@@ -128,11 +118,10 @@ const AddInputField = ({ initialData, onSave }) => {
                     onPress={Keyboard.dismiss}
                 >
                     <KeyboardAwareScrollView
-                        ref={scrollPositionRef}
                         contentContainerStyle={styles.scrollViewContainer}
                         extraScrollHeight={50}
                         keyboardShouldPersistTaps="handled"
-                        enableResetScrollToCoords={false}
+                        enableResetScrollToCoords={false}   //キーボードを閉じてもスクロール位置をリセットしない
                     >
                         <FieldList
                             title={formData.title}
@@ -147,12 +136,10 @@ const AddInputField = ({ initialData, onSave }) => {
                                     ({ ...prev, body: newBody }));
                                 setIsEdited(true);
                             }}
-                            onFocus={handleFocus}
                         />
                         <ReferenceFieldList
                             reference={formData.reference}
                             setReference={handleInputReferenceChange}
-                            onFocus={handleFocus}
                         />
                         <Button
                             title="保存する"

@@ -2,22 +2,19 @@
 
 import { StyleSheet, View, Text } from "react-native";
 import InputField from "./InputField";
-import { useRef } from "react";
 
-const FieldList = ({ title, setTitle, body, setBody, onFocus }) => {
-    const inputRef = useRef(null);
-
+const FieldList = ({ title, setTitle, body, setBody }) => {
     //InputFieldに渡すタイトルと本文の要素
     const settingItems = [
         {
-            id: 0,
+            id: 'title',
             value: title,
             onChangeText: setTitle,
             placeholder: "タイトル",
             style: styles.inputLine
         },
         {
-            id: 1,
+            id: 'body',
             value: body,
             onChangeText: setBody,
             placeholder: "本文",
@@ -32,13 +29,6 @@ const FieldList = ({ title, setTitle, body, setBody, onFocus }) => {
                 <Text style={styles.text}>{data.placeholder}</Text>
                 <InputField
                     {...data}
-                    ref={(ref) => (inputRef.current = ref)}
-                    onFocus={() => {
-                        //ページ全体に対してのフォームの位置を取得し、onFocusに渡す
-                        inputRef.current.measure((x, y, width, height, pageX, pageY) => {
-                            onFocus(pageY);
-                        });
-                    }}
                 />
             </View>
         );
@@ -63,7 +53,7 @@ const styles = StyleSheet.create({
         borderColor: 'silver',
         borderWidth: 1,
         fontSize: 16,
-        maxHeight: 250
+        maxHeight: 200
     }
 });
 
