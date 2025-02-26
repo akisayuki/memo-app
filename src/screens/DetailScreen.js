@@ -81,37 +81,36 @@ const styles = StyleSheet.create({
     },
     itemContainer: {
         marginTop: 16,
-        paddingBottom: 12
+        padding: 10
     },
     title: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold',
-        borderBottomWidth: 1,
-        borderBottomColor: 'silver',
         paddingBottom: 10,
         marginBottom: 10
     },
     body: {
         fontSize: 16,
+        borderTopWidth: 1,
+        borderTopColor: 'silver',
         borderBottomWidth: 1,
         borderBottomColor: 'silver',
-        paddingBottom: 20,
+        paddingVertical: 10,
         margin: 5
     },
     referenceTitle: {
         fontSize: 18,
         fontWeight: 'bold',
-        paddingTop: 10,
-        paddingBottom: 10,
-        marginTop: 10
+        paddingTop: 20,
+        marginTop: 30
     },
     reference: {
         fontSize: 16,
         borderBottomWidth: 1,
         borderBottomColor: 'silver',
-        paddingTop: 10,
-        paddingBottom: 10,
-        margin: 5
+        padding: 10,
+        margin: 5,
+        marginLeft: 10
     }
 });
 
