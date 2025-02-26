@@ -3,18 +3,18 @@
 import { StyleSheet, View, Text } from "react-native";
 import InputField from "./InputField";
 
-const FieldList = ({ title, setTitle, body, setBody}) => {
+const FieldList = ({ title, setTitle, body, setBody }) => {
     //InputFieldに渡すタイトルと本文の要素
     const settingItems = [
         {
-            id: 0,
+            id: 'title',
             value: title,
             onChangeText: setTitle,
             placeholder: "タイトル",
             style: styles.inputLine
         },
         {
-            id: 1,
+            id: 'body',
             value: body,
             onChangeText: setBody,
             placeholder: "本文",
@@ -27,10 +27,12 @@ const FieldList = ({ title, setTitle, body, setBody}) => {
         return(
             <View key={data.id}>
                 <Text style={styles.text}>{data.placeholder}</Text>
-                <InputField {...data} />
+                <InputField
+                    {...data}
+                />
             </View>
         );
-    })
+    });
 }
 
 const styles = StyleSheet.create({
@@ -51,8 +53,8 @@ const styles = StyleSheet.create({
         borderColor: 'silver',
         borderWidth: 1,
         fontSize: 16,
-        maxHeight: 300
+        maxHeight: 200
     }
-})
+});
 
 export default FieldList;

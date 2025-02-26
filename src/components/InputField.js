@@ -2,8 +2,7 @@
 
 import { TextInput } from "react-native";
 
-
-const InputField = ({ value, onChangeText, placeholder, style}) => {
+const InputField = ({ value, onChangeText, placeholder, style }) => {
     return (
         <TextInput
             multiline
@@ -13,6 +12,6 @@ const InputField = ({ value, onChangeText, placeholder, style}) => {
             style={style}
         />
     );
-}
+};
 
 export default InputField;
