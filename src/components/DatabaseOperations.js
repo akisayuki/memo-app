@@ -2,27 +2,9 @@
 
 import * as SQLite from 'expo-sqlite'
 
-const DEVELOPMENT_MODE = true;
-//データベースのリセット
-//TODO リリース時には必ず消すこと
-export const resetDatabase = async () => {
-    try {
-        const db = await SQLite.openDatabaseAsync('app.db');
-        db.execAsync(`
-            DROP TABLE IF EXISTS entries;
-            DROP TABLE IF EXISTS reference_list;
-        `);
-        console.log('Database reset successfully.');
-    } catch (error) {
-        console.error('Database reset failed:', error);
-    }
-}
 
 //データベースの初期化
 export const initDatabase = async () => {
-    if (DEVELOPMENT_MODE) {
-        await resetDatabase();
-    }
     try {
         const db = await SQLite.openDatabaseAsync('app.db');
         //PRAGMAの設定
