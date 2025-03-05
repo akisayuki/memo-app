@@ -3,7 +3,6 @@
 import { useNavigation } from "@react-navigation/native";
 import AddInputField from "../components/AddInputField";
 import { updateData } from "../components/DatabaseOperations";
-import { Alert } from "react-native";
 
 
 const EditEntryScreen = ({ route }) => {

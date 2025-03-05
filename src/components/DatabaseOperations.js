@@ -110,7 +110,6 @@ export const updateData = async (entriesId, title, body, reference_list) => {
                     [reference.value, entriesId, reference.id]
                 );
             }
-            
         }
         //entiresテーブルのtitleとbodyを、idを取得して更新
         await db.runAsync(
