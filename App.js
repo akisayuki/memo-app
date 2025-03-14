@@ -6,7 +6,6 @@ import NewEntryScreen from './src/screens/NewEntryScreen';
 import { useEffect, useState } from 'react';
 import { initDatabase } from './src/components/DatabaseOperations';
 import { openDatabaseSync } from 'expo-sqlite';
-import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
 import DetailScreen from './src/screens/DetailScreen';
 import EditEntryScreen from './src/screens/EditEntryScreen';
 import { Button } from 'react-native';
@@ -33,9 +32,6 @@ export default function App() {
     }
     init();
   }, []);
-
-  //Drizzle Studioプラグインをセットアップ
-  useDrizzleStudio(db);
 
   //Navigationの設定
   const MyStack = createNativeStackNavigator({

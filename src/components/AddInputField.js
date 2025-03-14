@@ -60,6 +60,7 @@ const AddInputField = ({ initialData, onSave }) => {
                 {
                     text: '破棄',
                     style: 'destructive',
+                    //dataは、スクリーン除去のトリガーとなるアクションを持つオブジェクトを受け取る
                     onPress: () => navigation.dispatch(data.action)
                 }
             ]

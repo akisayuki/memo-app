@@ -4,7 +4,6 @@ import React from "react";
 import AddInputField from "../components/AddInputField";
 import { onSaveData } from "../components/DatabaseOperations";
 import { useNavigation } from "@react-navigation/native";
-import { Alert } from "react-native";
 
 const NewEntryScreen = () => {
     const initialData = {
